@@ -1586,6 +1586,9 @@ recv_h(Stream,
         active ->
             %% If the stream is active, let the process deal with it.
             Pid = h2_stream_set:pid(Stream),
+            NotifyPid = h2_stream_set:notify_pid(Stream),
+            StreamId = h2_stream_set:stream_id(Stream),
+            recv_headers_cb(NotifyPid, StreamId, Headers),
             gen_fsm:send_event(Pid, {recv_h, Headers});
         closed ->
             %% If the stream is closed, there's no running FSM
@@ -1596,6 +1599,10 @@ recv_h(Stream,
             %% we'll throw this
             rst_stream(Stream, ?STREAM_CLOSED, Conn)
     end.
+
+
+recv_headers_cb(Pid, StreamId, Headers) ->
+    Pid ! {'RECV_HEADERS', StreamId, Headers}.
 
 -spec send_h(
         h2_stream_set:stream(),
