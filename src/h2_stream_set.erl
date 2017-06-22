@@ -236,7 +236,7 @@ new_stream(
                            send_window_size=InitialSendWindow,
                            recv_window_size=InitialRecvWindow
                           },
-            lager:debug("NewStream ~p", [NewStream]),
+            h2_log:debug("NewStream ~p", [NewStream]),
             case upsert(NewStream, StreamSet) of
                 {error, ?REFUSED_STREAM} ->
                     %% This should be very rare, if it ever happens at
@@ -464,7 +464,7 @@ upsert_peer_subset(
 upsert_peer_subset(
  Stream,
  PeerSubset) ->
-    lager:error("Tried upserting ~p to ~p, but clause isn't covered",
+    h2_log:error("Tried upserting ~p to ~p, but clause isn't covered",
                 [Stream, PeerSubset]),
     PeerSubset.
 

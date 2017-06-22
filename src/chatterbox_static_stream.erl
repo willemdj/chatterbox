@@ -24,20 +24,20 @@ init(ConnPid, StreamId) ->
                     stream_id=StreamId}}.
 
 on_receive_request_headers(Headers, State) ->
-    lager:info("on_receive_request_headers(~p, ~p)", [Headers, State]),
+    h2_log:info("on_receive_request_headers(~p, ~p)", [Headers, State]),
     {ok, State#cb_static{req_headers=Headers}}.
 
 on_send_push_promise(Headers, State) ->
-    lager:info("on_send_push_promise(~p, ~p)", [Headers, State]),
+    h2_log:info("on_send_push_promise(~p, ~p)", [Headers, State]),
     {ok, State#cb_static{req_headers=Headers}}.
 
 on_receive_request_data(Bin, State)->
-    lager:info("on_receive_request_data(~p, ~p)", [Bin, State]),
+    h2_log:info("on_receive_request_data(~p, ~p)", [Bin, State]),
     {ok, State}.
 
 on_request_end_stream(State=#cb_static{connection_pid=ConnPid,
                                        stream_id=StreamId}) ->
-    lager:info("on_request_end_stream(~p)", [State]),
+    h2_log:info("on_request_end_stream(~p)", [State]),
     Headers = State#cb_static.req_headers,
 
     Method = proplists:get_value(<<":method">>, Headers),
@@ -69,8 +69,8 @@ on_request_end_stream(State=#cb_static{connection_pid=ConnPid,
     %% TODO: Logic about "/" vs "index.html", "index.htm", etc...
     %% Directory browsing?
     File = RootDir ++ Path4,
-    lager:debug("[chatterbox_static_stream] ~p serving ~p on stream ~p", [self(), File, StreamId]),
-    %%lager:info("Request Headers: ~p", [Headers]),
+    h2_log:debug("[chatterbox_static_stream] ~p serving ~p on stream ~p", [self(), File, StreamId]),
+    %%h2_log:info("Request Headers: ~p", [Headers]),
 
     {HeadersToSend, BodyToSend} =
         case {filelib:is_file(File), filelib:is_dir(File)} of
@@ -106,7 +106,7 @@ on_request_end_stream(State=#cb_static{connection_pid=ConnPid,
                                             [dot_hack(lists:last(M)) || M <- Matches];
                                         _ -> []
                                     end,
-                        lager:debug("Resources to push: ~p", [Resources]),
+                        h2_log:debug("Resources to push: ~p", [Resources]),
 
                         NewStreams =
                             lists:foldl(
@@ -120,7 +120,7 @@ on_request_end_stream(State=#cb_static{connection_pid=ConnPid,
                               [],
                               Resources
                              ),
-                        lager:debug("New Streams for promises: ~p", [NewStreams]),
+                        h2_log:debug("New Streams for promises: ~p", [NewStreams]),
                         ok;
                     _ ->
                         ok

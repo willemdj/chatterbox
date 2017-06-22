@@ -31,5 +31,5 @@ transport(gen_tcp) ->
 transport(ssl) ->
     ssl;
 transport(Other) ->
-    lager:error("chatterbox_ranch_protocol doesn't support ~p", [Other]),
+    h2_log:error("chatterbox_ranch_protocol doesn't support ~p", [Other]),
     error(unknown_protocol).

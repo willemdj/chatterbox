@@ -222,7 +222,7 @@ idle({send_h, Headers},
         request_headers=Headers
        }};
 idle(Message, State) ->
-    lager:error("stream idle processing unexpected message: ~p", [Message]),
+    h2_log:error("stream idle processing unexpected message: ~p", [Message]),
     %% Never should happen.
     {next_state, idle, State}.
 
@@ -371,7 +371,7 @@ open(
        response_headers=Headers
       }};
 open(Msg, Stream) ->
-    lager:warning("Some unexpected message in open state. ~p, ~p", [Msg, Stream]),
+    h2_log:warning("Some unexpected message in open state. ~p, ~p", [Msg, Stream]),
     {next_state, open, Stream}.
 
 half_closed_remote(
@@ -525,7 +525,7 @@ handle_sync_event(_E, _F, StateName, State) ->
     {reply, wat, StateName, State}.
 
 handle_info(M, _StateName, State) ->
-    lager:error("BOOM! ~p", [M]),
+    h2_log:error("BOOM! ~p", [M]),
     {stop, normal, State}.
 
 code_change(_OldVsn, StateName, State, _Extra) ->
@@ -534,7 +534,7 @@ code_change(_OldVsn, StateName, State, _Extra) ->
 terminate(normal, _StateName, _State) ->
     ok;
 terminate(_Reason, _StateName, _State) ->
-    lager:debug("terminate reason: ~p~n", [_Reason]).
+    h2_log:debug("terminate reason: ~p~n", [_Reason]).
 
 -spec rst_stream_(error_code(), state()) ->
                          {next_state,

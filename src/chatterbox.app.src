@@ -1,53 +1,25 @@
-%% -*- mode: erlang -*-
-{application, chatterbox,
- [
-  {description, "chatterbox library for http2"},
-  {vsn, git},
-  {registered, []},
-  {applications, [
-                  kernel,
-                  stdlib,
-                  crypto,
-                  public_key,
-                  ssl,
-                  hpack,
-                  lager
-                 ]},
-  {env,
-   [
-    {port, 80},
-    {concurrent_acceptors, 20},
-
-    %% These are the defaults for ALL HTTP/2 clients. You can change
-    %% any of them that you want to, but these will be the ones used
-    %% by default if you don't.
-
-    %% I wanted them to be one proplist, but I realized that will be
-    %% annoying for people that only want to change one default
-    %% setting.
-    {client_header_table_size, 4096},
-    {client_enable_push, 1},
-    {client_max_concurrent_streams, unlimited},
-    {client_initial_window_size, 65535},
-    {client_max_frame_size, 16384},
-    {client_max_header_list_size, unlimited},
-
-    {client_flow_control, auto},
-
-    %% Same for server
-    {server_header_table_size, 4096},
-    {server_enable_push, 1},
-    {server_max_concurrent_streams, unlimited},
-    {server_initial_window_size, 65535},
-    {server_max_frame_size, 16384},
-    {server_max_header_list_size, unlimited},
-
-    {server_flow_control, auto}
-
-  ]},
-
-  {maintainers, ["Joe DeVivo"]},
-  {licenses, ["MIT"]},
-  {links, [{"Github", "https://github.com/joedevivo/chatterbox"}]}
- ]}.
-%% vim: set filetype=erlang tabstop=2
+{application,chatterbox,
+             [{description,"chatterbox library for http2"},
+              {vsn,"git"},
+              {registered,[]},
+              {applications,[kernel,stdlib,crypto,public_key,ssl,hpack]},
+              {env,[{port,80},
+                    {concurrent_acceptors,20},
+                    {client_header_table_size,4096},
+                    {client_enable_push,1},
+                    {client_max_concurrent_streams,unlimited},
+                    {client_initial_window_size,65535},
+                    {client_max_frame_size,16384},
+                    {client_max_header_list_size,unlimited},
+                    {client_flow_control,auto},
+                    {server_header_table_size,4096},
+                    {server_enable_push,1},
+                    {server_max_concurrent_streams,unlimited},
+                    {server_initial_window_size,65535},
+                    {server_max_frame_size,16384},
+                    {server_max_header_list_size,unlimited},
+                    {server_flow_control,auto}]},
+              {maintainers,["Joe DeVivo"]},
+              {licenses,["MIT"]},
+              {links,[{"Github","https://github.com/joedevivo/chatterbox"}]},
+              {modules,[]}]}.
